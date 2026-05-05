@@ -1,8 +1,7 @@
 :root {
     --primary: #A67C52;
     --background: #000000;
-    --card-bg: #111111; /* Un tono apenas más claro que el fondo para que se note el difuminado */
-    --text-main: #FDFDFD;
+    --card-bg: #111111; 
     --text-muted: #BDBDBD;
     --border: #222;
 }
@@ -43,7 +42,7 @@ body {
     object-position: center 10%;
 }
 
-/* El truco del difuminado: */
+/* difuminado: */
 .fade-overlay {
     position: absolute;
     bottom: 0;
@@ -133,4 +132,10 @@ button {
 @media (max-width: 380px) {
     .header-image-container { height: 260px; }
     h1 { font-size: 1.6rem; }
+} 
+.booking-form h3 {
+    color: #ffffff; 
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
 }
