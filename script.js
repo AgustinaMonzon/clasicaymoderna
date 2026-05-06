@@ -2,6 +2,7 @@ const bM = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"];
 const bT = ["16:30", "17:00", "17:30", "18:00", "18:30", "19:00"];
 const hC = [...bM, ...bT];
 
+// Mantené tu lista de disponibilidad
 const disp = {
     "Martes 5": hC,
     "Miércoles 6": hC,
@@ -25,9 +26,30 @@ const sD = document.getElementById('dia');
 const sH = document.getElementById('hora');
 const urlAPI = 'https://sheetdb.io/api/v1/23xwgm6jc6m0l';
 
+// Función para obtener el nombre del día hoy en el formato de tu lista
+function obtenerNombreHoy() {
+    const opciones = { weekday: 'long', day: 'numeric', timeZone: 'America/Argentina/Buenos_Aires' };
+    let hoy = new Intl.DateTimeFormat('es-AR', opciones).format(new Date());
+    // Capitalizamos la primera letra y sacamos el "de" si aparece
+    hoy = hoy.charAt(0).toUpperCase() + hoy.slice(1).replace(' de', '');
+    return hoy; 
+}
+
 function init() {
     sD.innerHTML = '';
-    Object.keys(disp).forEach(d => {
+    const hoyReal = obtenerNombreHoy();
+    
+    // Solo agregamos al selector los días que son HOY o FECHAS FUTURAS
+    // Esto hace que "Martes 5" desaparezca solo cuando ya es Miércoles 6
+    let diasAMostrar = Object.keys(disp);
+    let indiceHoy = diasAMostrar.indexOf(hoyReal);
+
+    // Si el día de hoy está en la lista, cortamos los anteriores
+    if (indiceHoy !== -1) {
+        diasAMostrar = diasAMostrar.slice(indiceHoy);
+    }
+
+    diasAMostrar.forEach(d => {
         let o = document.createElement('option');
         o.value = d; o.text = d;
         sD.appendChild(o);
@@ -40,32 +62,29 @@ async function obtenerOcupados() {
         const res = await fetch(urlAPI);
         return await res.json();
     } catch (e) {
-        console.error("Error al obtener ocupados:", e);
         return [];
     }
 }
 
 async function upd() {
     const dS = sD.value;
-    const hs = disp[dS];
+    const hs = disp[dS] || [];
+    const hoyReal = obtenerNombreHoy();
     
-    sH.innerHTML = '<option>Cargando disponibilidad...</option>';
+    sH.innerHTML = '<option>Cargando...</option>';
     sH.disabled = true;
 
     const ocupados = await obtenerOcupados();
-    
     sH.innerHTML = '';
+
     const ahora = new Date();
-    // Hoy es miércoles 6 de mayo según tu calendario
-    const diaHoyString = "Miércoles 6"; 
 
     hs.forEach(h => {
-        // Comparamos con el formato del Excel (ej: "10:30 hs")
         const formatoExcel = h + " hs";
         const estaOcupado = ocupados.find(t => t.fecha === dS && t.hora === formatoExcel);
 
         if (!estaOcupado) {
-            if (dS === diaHoyString) {
+            if (dS === hoyReal) {
                 const [hora, min] = h.split(':');
                 const horaTurno = new Date();
                 horaTurno.setHours(parseInt(hora), parseInt(min), 0);
@@ -84,8 +103,7 @@ async function upd() {
 
 function agregarOpcion(h) {
     let o = document.createElement('option');
-    o.value = h; 
-    o.text = h + " hs";
+    o.value = h; o.text = h + " hs";
     sH.appendChild(o);
 }
 
