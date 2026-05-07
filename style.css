@@ -1,141 +1,216 @@
-:root {
-    --primary: #A67C52;
-    --background: #000000;
-    --card-bg: #111111; 
-    --text-muted: #BDBDBD;
-    --border: #222;
-}
+/* ==================== style.css ==================== */
+/* 
+  Diseño: Dark theme con acentos cobrizos (#a67c52)
+  Enfoque: Mobile-first, accesibilidad básica, transiciones suaves
+  Nota: Evitar hardcodear colores; usar variables CSS si escala el proyecto
+*/
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
+/* --- BASE & LAYOUT --- */
 body {
+    background-color: #000;
+    color: #fff;
     font-family: 'Roboto', sans-serif;
-    background-color: var(--background);
-    color: var(--text-main);
+    margin: 0;
     display: flex;
-    justify-content: center;
-    min-height: 100vh;
-    padding: 10px;
+    flex-direction: column; /* Permite que footer se ubique al final */
+    align-items: center;
+    padding: 20px;
+    min-height: 100vh; /* Garantiza fondo completo en pantallas cortas */
 }
 
 .booking-card {
-    background: var(--card-bg);
+    max-width: 400px;
     width: 100%;
-    max-width: 420px;
-    border-radius: 20px;
+    background: #0a0a0a;
+    border-radius: 15px;
     overflow: hidden;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.9);
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8); /* Profundidad visual */
 }
 
-/* CONTENEDOR CON DIFUMINADO */
+/* --- HEADER VISUAL --- */
 .header-image-container {
     position: relative;
     width: 100%;
-    height: 320px;
-    background: #000;
+    line-height: 0;
 }
+.main-photo { width: 100%; display: block; }
 
-.main-photo {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 10%;
-}
-
-/* difuminado: */
+/* Overlay degradado: mejora legibilidad del texto sobre imagen */
 .fade-overlay {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60%; /* Cuanto más alto, más largo es el difuminado */
-    background: linear-gradient(to top, var(--card-bg) 10%, transparent 100%);
+    bottom: 0; left: 0; width: 100%; height: 45%; 
+    background: linear-gradient(to bottom, rgba(10,10,10,0) 0%, #0a0a0a 100%);
 }
 
-header {
-    padding: 10px 15px 5px;
-    text-align: center;
-    position: relative;
-    z-index: 2;
-}
-
-h1 {
+/* Tipografía de marca */
+h1.logo-text {
     font-family: 'Playfair Display', serif;
-    font-size: 1.9rem;
-    color: var(--primary);
-    text-transform: uppercase;
+    color: #a67c52; 
+    font-size: 1.8rem;
     letter-spacing: 2px;
+    margin: 10px 0 5px;
+    position: relative; z-index: 2;
 }
-
 .subtitle {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    letter-spacing: 4px;
+    color: #888;
+    letter-spacing: 2px;
     text-transform: uppercase;
-}
-
-.info-box {
-    padding: 15px;
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-}
-
-.booking-form { padding: 20px; }
-
-h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.3rem;
+    font-size: 0.99rem;
     margin-bottom: 20px;
-    text-align: center;
 }
 
-.form-group { margin-bottom: 15px; }
+/* Info de contacto */
+.info-box {
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-bottom: 22px;
+}
+.location-link {
+    color: #ccc;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.location-link:hover {
+    color: #a67c52;
+    text-decoration: underline;
+}
 
-label {
+/* --- FORMULARIO DE TURNOS --- */
+.booking-form {
+    padding: 20px;
+    background: #111;
+    margin: 15px;
+    border-radius: 10px;
+}
+.booking-form h3 {
+    margin-top: 0;
+    color: #eee;
+    font-size: 1.1rem;
+}
+.form-group {
+    text-align: left;
+    margin-bottom: 15px;
+}
+.form-group label {
     display: block;
     font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-    text-transform: uppercase;
+    color: #a67c52; /* Acento de marca en etiquetas */
+    margin-bottom: 5px;
 }
-
 select {
     width: 100%;
-    padding: 14px;
-    background-color: #000;
-    border: 1px solid var(--border);
-    color: #FFF;
-    border-radius: 8px;
-    font-size: 16px;
-    outline: none;
+    padding: 12px;
+    background: #050505;
+    border: 1px solid #222;
+    color: #fff;
+    border-radius: 5px;
+    font-size: 0.9rem;
 }
 
-button {
-    width: 100%;
-    padding: 16px;
-    background-color: var(--primary);
+/* Botón WhatsApp: CTA principal */
+#btnWhatsapp {
+    background-color: #a67c52;
     color: #000;
-    font-weight: 700;
     border: none;
+    padding: 15px;
     border-radius: 8px;
+    width: 100%;
+    font-weight: 700;
     cursor: pointer;
-    text-transform: uppercase;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+#btnWhatsapp:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* --- MÓDULO DE RESEÑAS --- */
+.reviews-section {
+    padding: 10px 20px;
+    border-top: 1px solid #222;
+    margin-top: 10px;
+}
+#toggle-review-form {
+    background: none;
+    border: none;
+    color: #a67c52;
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+.reviews-form {
+    display: none;
+    background: #111;
+    padding: 15px;
+    border-radius: 8px;
     margin-top: 10px;
 }
 
-@media (max-width: 380px) {
-    .header-image-container { height: 260px; }
-    h1 { font-size: 1.6rem; }
-} 
-.booking-form h3 {
-    color: #ffffff; 
-    margin-bottom: 20px;
+/* Sistema de estrellas: orden inverso para efecto hover CSS puro */
+.stars-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    font-size: 1.8rem;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.star { color: #333; transition: 0.2s; padding: 0 2px; }
+.star:hover, .star:hover ~ .star, .star.active, .star.active ~ .star {
+    color: #f1c40f; /* Dorado para feedback visual */
+}
+
+/* Tarjeta de reseña individual */
+.resena-card {
+    background: #111;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #a67c52; /* Acento de marca */
+    text-align: left;
+}
+
+/* --- FOOTER & FIRMA --- */
+.site-footer {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px 0;
+    margin: 20px auto 0;
     text-align: center;
+    border-top: 1px solid #1a1a1a;
+}
+.history-text {
     font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: #a67c52;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+.footer-divider {
+    width: 30px;
+    height: 1px;
+    background: #333;
+    margin: 15px auto;
+}
+
+/* Firma: estilo sobrio con hover sutil */
+.nombre-firma {
+    color: #666 !important;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-size: 0.85rem;
+    transition: 0.4s ease;
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+}
+.signature-link:hover .nombre-firma {
+    color: #a67c52 !important;
+    letter-spacing: 5px;
+    cursor: pointer;
 }
