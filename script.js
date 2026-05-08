@@ -5,7 +5,7 @@
 const urlAPI = 'https://sheetdb.io/api/v1/23xwgm6jc6m0l';
 
 // 🕐 Horarios base de atención (formato 24h)
-const hC = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"];
+const hC = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00" , "12:30", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
 
 // 📅 Disponibilidad por día: estructura { "Día N": [horarios] }
 // Nota: actualizar manualmente según agenda real o migrar a fuente dinámica
