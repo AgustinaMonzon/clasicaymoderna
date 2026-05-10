@@ -1,64 +1,41 @@
-<!-- ==================== index.html ==================== -->
-<!-- 
-  Barbería Clásica & Moderna - Sistema de Turnos
-  Funcionalidades:
-  • Reserva de turnos con validación de horarios disponibles
-  • Integración con WhatsApp para confirmación
-  • Sistema de reseñas conectado a Google Sheets (vía SheetDB)
-  • Diseño responsive con enfoque mobile-first
--->
 <!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clásica & Moderna | Turnos</title>
-
-    <!-- Favicon: mantener logo.jpg en raíz del proyecto -->
+    <link rel="stylesheet" href="style.css?v=3.0" />
     <link rel="icon" type="image/jpg" href="logo.jpg" />
-
-    <!-- Tipografía: Playfair Display (branding) + Roboto (legibilidad) -->
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <!-- Contenedor principal: tarjeta de reserva centrada -->
     <div class="booking-card">
-      <!-- Header visual con overlay para contraste de texto -->
       <div class="header-image-container">
-        <img
-          src="logo.jpg"
-          alt="Logo Barbería Clásica & Moderna"
-          class="main-photo"
-        />
+        <img src="logo.jpg" alt="Logo Barbería" class="main-photo" />
         <div class="fade-overlay"></div>
       </div>
 
-      <!-- Identidad de marca -->
       <header>
         <h1 class="logo-text">CLÁSICA & MODERNA</h1>
         <p class="subtitle">Peluquería Masculina</p>
       </header>
 
-      <!-- Info de contacto: enlace a Maps + política de turnos -->
       <section class="info-box">
         <p>
           <a
-            href="https://www.google.com/maps/search/?api=1&query=Pringles+272,+Victoria,+Entre+Ríos"
+            href="https://goo.gl/maps/VictoriaER"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
             class="location-link"
+            >📍 Pringles 272, Victoria, Entre Ríos</a
           >
-            📍 Pringles 272, Victoria, Entre Ríos
-          </a>
         </p>
-        <p>🗓️ Atención únicamente con turno previo</p>
+        <p>Atención únicamente con turno previo</p>
       </section>
 
-      <!-- Formulario de reserva: selects poblados dinámicamente -->
       <section class="booking-form">
         <h3>Reservá tu Turno</h3>
         <div class="form-group">
@@ -67,36 +44,32 @@
         </div>
         <div class="form-group">
           <label for="hora">Horario disponible:</label>
-          <select id="hora"></select>
+          <select id="hora" disabled>
+            <option>Cargando...</option>
+          </select>
         </div>
-        <!-- Botón WhatsApp: se habilita solo con día/hora válidos -->
         <button id="btnWhatsapp" onclick="enviarTurno()" disabled>
           <img
             src="https://cdn-icons-png.flaticon.com/512/733/733585.png"
             width="20"
             alt="ws"
           />
-          Agendar por WhatsApp
+          AGENDAR POR WHATSAPP
         </button>
       </section>
 
-      <!-- Módulo de reseñas: formulario + visualización -->
       <section class="reviews-section">
         <button id="toggle-review-form" onclick="toggleReviewForm()">
           + Dejanos tu opinión
         </button>
-
-        <!-- Formulario colapsable -->
-        <div class="reviews-form" id="form-opinion">
+        <div class="reviews-form" id="form-opinion" style="display: none">
           <h3>Tu opinión nos importa</h3>
           <input
             type="text"
             id="rev-nombre"
             placeholder="Tu nombre"
-            class="input-review"
+            class="input-field"
           />
-
-          <!-- Rating con estrellas: data-value para lógica JS -->
           <div class="stars-rating">
             <span class="star" data-value="5">★</span>
             <span class="star" data-value="4">★</span>
@@ -104,17 +77,19 @@
             <span class="star" data-value="2">★</span>
             <span class="star" data-value="1">★</span>
           </div>
-
           <textarea
             id="rev-comentario"
-            placeholder="¿Cómo fue tu experiencia en la peluquería?"
+            placeholder="¿Cómo fue tu experiencia?"
+            class="input-field"
           ></textarea>
-          <button id="btnEnviarReseña" onclick="enviarReseña()">
+          <button
+            id="btnEnviarReseña"
+            onclick="enviarReseña()"
+            class="btn-main"
+          >
             Publicar Comentario
           </button>
         </div>
-
-        <!-- Contenedor dinámico de reseñas -->
         <div class="reviews-display">
           <h4>Lo que dicen nuestros clientes:</h4>
           <div id="contenedor-resenas">Cargando comentarios...</div>
@@ -122,27 +97,27 @@
       </section>
     </div>
 
-    <script src="script.js"></script>
-  </body>
-
-  <!-- Footer: sello de confianza + firma con enlace a Instagram -->
-  <footer class="site-footer">
-    <div class="trust-seal">
+    <footer class="site-footer">
       <p class="history-text">
         "Más de 10 años en el rubro. Tratando de mantener lo Clásico de la
         Peluquería"
       </p>
       <div class="footer-divider"></div>
-      <div class="footer-social">
-        <a
-          href="https://instagram.com/elviomonzon"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="signature-link"
-        >
-          <span class="nombre-firma">Elvio Monzón</span>
-        </a>
-      </div>
-    </div>
-  </footer>
+      <a
+        href="https://instagram.com/elviomonzon"
+        target="_blank"
+        rel="noopener"
+        class="signature-link"
+      >
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+          alt="Instagram"
+          class="ig-icon"
+        />
+        <span class="nombre-firma">Elvio Monzón</span>
+      </a>
+    </footer>
+
+    <script src="script.js?v=3.0"></script>
+  </body>
 </html>

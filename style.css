@@ -2,7 +2,7 @@
 /* 
   Diseño: Dark theme con acentos cobrizos (#a67c52)
   Enfoque: Mobile-first, accesibilidad básica, transiciones suaves
-  Nota: Evitar hardcodear colores; usar variables CSS si escala el proyecto
+  CORREGIDO: Footer y tamaños optimizados
 */
 
 /* --- BASE & LAYOUT --- */
@@ -12,34 +12,41 @@ body {
     font-family: 'Roboto', sans-serif;
     margin: 0;
     display: flex;
-    flex-direction: column; /* Permite que footer se ubique al final */
+    flex-direction: column;
     align-items: center;
-    padding: 20px;
-    min-height: 100vh; /* Garantiza fondo completo en pantallas cortas */
+    padding: 20px 15px 40px; /* Ajustado para móvil */
+    min-height: 100vh;
 }
 
 .booking-card {
-    max-width: 400px;
+    max-width: 450px; /* Un poco más ancho para mejor visualización */
     width: 100%;
     background: #0a0a0a;
-    border-radius: 15px;
+    border-radius: 20px; /* Más redondeado pero no exagerado */
     overflow: hidden;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8); /* Profundidad visual */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
-/* --- HEADER VISUAL --- */
+/* --- HEADER VISUAL (ORIGINAL - SIN CAMBIOS) --- */
 .header-image-container {
     position: relative;
     width: 100%;
     line-height: 0;
 }
-.main-photo { width: 100%; display: block; }
+
+.main-photo { 
+    width: 100%; 
+    display: block; 
+}
 
 /* Overlay degradado: mejora legibilidad del texto sobre imagen */
 .fade-overlay {
     position: absolute;
-    bottom: 0; left: 0; width: 100%; height: 45%; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 45%; 
     background: linear-gradient(to bottom, rgba(10,10,10,0) 0%, #0a0a0a 100%);
 }
 
@@ -50,13 +57,15 @@ h1.logo-text {
     font-size: 1.8rem;
     letter-spacing: 2px;
     margin: 10px 0 5px;
-    position: relative; z-index: 2;
+    position: relative; 
+    z-index: 2;
 }
+
 .subtitle {
     color: #888;
     letter-spacing: 2px;
     text-transform: uppercase;
-    font-size: 0.99rem;
+    font-size: 0.9rem; /* Ajustado para móvil */
     margin-bottom: 20px;
 }
 
@@ -65,12 +74,15 @@ h1.logo-text {
     font-size: 0.85rem;
     color: #ccc;
     margin-bottom: 22px;
+    padding: 0 20px; /* Padding para que no toque los bordes */
 }
+
 .location-link {
     color: #ccc;
     text-decoration: none;
     transition: color 0.3s ease;
 }
+
 .location-link:hover {
     color: #a67c52;
     text-decoration: underline;
@@ -78,34 +90,49 @@ h1.logo-text {
 
 /* --- FORMULARIO DE TURNOS --- */
 .booking-form {
-    padding: 20px;
+    padding: 25px 20px; /* Mejor padding para móvil */
     background: #111;
     margin: 15px;
-    border-radius: 10px;
+    border-radius: 15px; /* Un poco más redondeado */
 }
+
 .booking-form h3 {
     margin-top: 0;
     color: #eee;
-    font-size: 1.1rem;
+    font-size: 1.3rem; /* Un poco más grande para mejor lectura */
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    margin-bottom: 20px;
 }
+
 .form-group {
     text-align: left;
     margin-bottom: 15px;
 }
+
 .form-group label {
     display: block;
     font-size: 0.75rem;
-    color: #a67c52; /* Acento de marca en etiquetas */
+    color: #a67c52;
     margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
+
 select {
     width: 100%;
-    padding: 12px;
+    padding: 14px; /* Un poco más grande para touch */
     background: #050505;
     border: 1px solid #222;
     color: #fff;
-    border-radius: 5px;
-    font-size: 0.9rem;
+    border-radius: 8px; /* Más redondeado */
+    font-size: 1rem; /* Mejor tamaño para móvil */
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #a67c52;
 }
 
 /* Botón WhatsApp: CTA principal */
@@ -113,8 +140,8 @@ select {
     background-color: #a67c52;
     color: #000;
     border: none;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 16px 20px; /* Más alto para mejor touch */
+    border-radius: 25px; /* Más redondeado (píldora) */
     width: 100%;
     font-weight: 700;
     cursor: pointer;
@@ -122,95 +149,230 @@ select {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    transition: all 0.3s ease;
 }
+
+#btnWhatsapp:hover {
+    background-color: #c4956a;
+    transform: translateY(-2px);
+}
+
 #btnWhatsapp:disabled {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
 }
 
 /* --- MÓDULO DE RESEÑAS --- */
 .reviews-section {
-    padding: 10px 20px;
+    padding: 0 15px 20px; /* Ajustado */
     border-top: 1px solid #222;
     margin-top: 10px;
 }
+
 #toggle-review-form {
     background: none;
-    border: none;
+    border: 1.5px solid #a67c52;
     color: #a67c52;
+    padding: 12px 30px;
+    border-radius: 25px; /* Más redondeado */
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    margin: 20px auto 15px;
+    display: block;
+    transition: all 0.3s ease;
 }
+
+#toggle-review-form:hover {
+    background: rgba(166, 124, 82, 0.1);
+    transform: translateY(-2px);
+}
+
 .reviews-form {
     display: none;
     background: #111;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 25px 20px; /* Mejor padding */
+    border-radius: 15px;
     margin-top: 10px;
 }
 
-/* Sistema de estrellas: orden inverso para efecto hover CSS puro */
+.reviews-form h3 {
+    font-family: 'Playfair Display', serif;
+    color: #eee;
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.reviews-form input,
+.reviews-form textarea {
+    width: 100%;
+    padding: 14px;
+    margin: 10px 0;
+    background: #050505;
+    border: 1px solid #222;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+}
+
+.reviews-form input:focus,
+.reviews-form textarea:focus {
+    outline: none;
+    border-color: #a67c52;
+}
+
+.reviews-form textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Sistema de estrellas */
 .stars-rating {
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
-    font-size: 1.8rem;
+    font-size: 2rem; /* Un poco más grande */
     cursor: pointer;
-    margin-bottom: 10px;
+    margin: 15px 0;
+    gap: 8px;
 }
-.star { color: #333; transition: 0.2s; padding: 0 2px; }
-.star:hover, .star:hover ~ .star, .star.active, .star.active ~ .star {
-    color: #f1c40f; /* Dorado para feedback visual */
+
+.star { 
+    color: #333; 
+    transition: 0.2s; 
+    padding: 0 3px; 
+    cursor: pointer;
+}
+
+.star:hover, 
+.star:hover ~ .star, 
+.star.active, 
+.star.active ~ .star {
+    color: #f1c40f;
 }
 
 /* Tarjeta de reseña individual */
 .resena-card {
     background: #111;
-    padding: 12px;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    border-left: 3px solid #a67c52; /* Acento de marca */
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+    border-left: 4px solid #a67c52;
     text-align: left;
 }
 
-/* --- FOOTER & FIRMA --- */
+.resena-card strong {
+    color: #fff;
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.95rem;
+}
+
+.resena-card p {
+    color: #ccc;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Mensaje sin reseñas */
+.sin-resenas {
+    text-align: center;
+    color: #888;
+    font-size: 0.95rem;
+    margin: 20px 0;
+    font-style: italic;
+}
+/* --- FOOTER ARREGLADO --- */
+
 .site-footer {
     width: 100%;
-    max-width: 400px;
-    padding: 40px 0;
+    max-width: 450px;
+    padding: 25px 20px 30px;
     margin: 20px auto 0;
-    text-align: center;
+    text-align: center; /* Centra todo el contenido */
     border-top: 1px solid #1a1a1a;
+    display: flex; /* Usamos flexbox */
+    flex-direction: column; /* Elementos en columna */
+    align-items: center; /* Centra horizontalmente */
 }
+
 .history-text {
     font-family: 'Playfair Display', serif;
     font-style: italic;
     color: #a67c52;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 10px;
-}
-.footer-divider {
-    width: 30px;
-    height: 1px;
-    background: #333;
-    margin: 15px auto;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+    text-align: center; /* Asegura centrado */
+    width: 100%;
 }
 
-/* Firma: estilo sobrio con hover sutil */
-.nombre-firma {
-    color: #666 !important;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-size: 0.85rem;
-    transition: 0.4s ease;
-    display: inline-block;
-    font-family: 'Roboto', sans-serif;
+.footer-divider {
+    width: 35px;
+    height: 1px;
+    background: #333;
+    margin: 12px auto; /* auto centra horizontalmente */
 }
+
+/* Link de Instagram centrado */
+.signature-link {
+    display: inline-flex; /* Flex pero centrado */
+    align-items: center;
+    justify-content: center; /* Centra el contenido */
+    gap: 8px;
+    text-decoration: none;
+    margin: 5px auto 0; /* auto centra */
+}
+
+.ig-icon {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.nombre-firma {
+    color: #888 !important;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-size: 0.9rem;
+    font-family: 'Roboto', sans-serif;
+    transition: 0.3s ease;
+}
+
 .signature-link:hover .nombre-firma {
     color: #a67c52 !important;
-    letter-spacing: 5px;
-    cursor: pointer;
+    letter-spacing: 3px;
+}
+
+.signature-link:hover .ig-icon {
+    filter: brightness(1.1);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .site-footer {
+        padding: 20px 15px 25px;
+    }
+    
+    .history-text {
+        font-size: 0.95rem;
+    }
+    
+    .ig-icon {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .nombre-firma {
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+    }
 }
