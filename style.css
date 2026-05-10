@@ -146,18 +146,18 @@ select:focus {
 #btnWhatsapp {
     background-color: var(--acento);
     color: #000;
-     border: none; 
-  padding: 20px; 
-  border-radius: 50px;
-  width: 100%; 
-  font-weight: 600; 
-  font-size: 1.1rem;
-  cursor: pointer; 
-  transition: 0.3s;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
+    border: none;
+    padding: 20px;
+    border-radius: 50px;
+    width: 100%;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
 }
 
 #btnWhatsapp:hover {
@@ -353,71 +353,55 @@ select:focus {
 }
 
 @media (max-width: 480px) {
-    body {
-        padding: 15px 10px 0;
+    body { padding: 15px 10px 0; }
+    .booking-card { border-radius: 20px; }
+    h1.logo-text { font-size: 1.6rem; }
+    .subtitle { font-size: 0.85rem; margin-bottom: 15px; }
+    .info-box { padding: 0 15px; margin-bottom: 20px; }
+    .booking-form { padding: 35px 25px; margin: 0 15px 30px; }
+    .booking-form h3 { font-size: 1.8rem; }
+    .reviews-form { padding: 35px 25px; margin: 0 15px 30px; }
+    .resena-card { padding: 18px; margin: 0 15px 15px; }
+
+    #btnWhatsapp {
+        background-color: #3A3030;
+        color: #FFFFFF;
+        font-size: 1rem;
+        font-weight: 500;
+        text-transform: none;
+        letter-spacing: 0.5px;
+        padding: 17px 20px;
+        border-radius: 50px;
+        gap: 8px;
     }
-    
-    .booking-card {
-        border-radius: 20px;
-    }
-    
-    h1.logo-text {
-        font-size: 1.6rem;
-    }
-    
-    .subtitle {
-        font-size: 0.85rem;
-        margin-bottom: 15px;
-    }
-    
-    .info-box {
-        padding: 0 15px;
-        margin-bottom: 20px;
-    }
-    
-    .booking-form {
-        padding: 35px 25px;
-        margin: 0 15px 30px;
-    }
-    
-    .booking-form h3 {
-        font-size: 1.8rem;
-    }
-    
-    .reviews-form {
-        padding: 35px 25px;
-        margin: 0 15px 30px;
-    }
-    
-    .resena-card {
-        padding: 18px;
-        margin: 0 15px 15px;
-    }
-    
+    #btnWhatsapp:hover { background-color: #a67c52; }
+
     .history-text {
-        font-size: 0.95rem;
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 1.25rem;
+        line-height: 1.45;
+        color: #a67c52;
+        margin-bottom: 15px;
+        padding: 0 10px;
     }
-    
-    .ig-icon {
-        width: 18px;
-        height: 18px;
-    }
-    
+
     .nombre-firma {
-        font-size: 0.75rem;
-        letter-spacing: 2px;
+        font-size: 0.9rem;
+        letter-spacing: 1.5px;
+        font-weight: 400;
+        color: #a67c52;
+    }
+
+    .ig-icon {
+        width: 22px;
+        height: 22px;
     }
 }
 
 @media (max-width: 360px) {
-    h1.logo-text {
-        font-size: 1.4rem;
-    }
-    
-    .booking-form h3 {
-        font-size: 1.5rem;
-    }
-    
+    h1.logo-text { font-size: 1.4rem; }
+    .booking-form h3 { font-size: 1.5rem; }
     select, .reviews-form input, .reviews-form textarea {
         font-size: 0.95rem;
         padding: 13px;
