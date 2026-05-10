@@ -105,12 +105,12 @@ h1.logo-text {
 .booking-form h3 {
     margin-top: 0;
     color: var(--texto-principal);
-    font-size: 1.8rem;
-    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem; 
+  font-family: 'Cormorant Garamond', serif; 
     font-style: italic;
+    font-weight: 400; 
     margin-bottom: 20px;
 }
-
 .form-group {
     text-align: left;
     margin-bottom: 15px;
@@ -351,7 +351,27 @@ select:focus {
 .signature-link:hover .ig-icon {
     filter: brightness(1.1);
 }
+#btnEnviarReseña {
+    background-color: var(--acento); /* El color dorado de la barbería */
+    color: #000; 
+    border: none; 
+    padding: 20px; /* Tamaño robusto igual al de Nanina */
+    border-radius: 50px; /* Forma redondeada */
+    width: 100%; 
+    font-weight: 600; 
+    font-size: 1.1rem;
+    cursor: pointer; 
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px; /* Espacio con el textarea */
+}
 
+#btnEnviarReseña:hover {
+    background-color: var(--acento-hover);
+    transform: translateY(-2px);
+}
 @media (max-width: 480px) {
     body { padding: 15px 10px 0; }
     .booking-card { border-radius: 20px; }
@@ -406,4 +426,8 @@ select:focus {
         font-size: 0.95rem;
         padding: 13px;
     }
+}
+#btnEnviarReseña {
+    padding: 17px 20px;
+    font-size: 1rem;
 }
