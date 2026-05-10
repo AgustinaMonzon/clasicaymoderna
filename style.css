@@ -1,11 +1,22 @@
 /* ==================== style.css ==================== */
-/* 
-  Diseño: Dark theme con acentos cobrizos (#a67c52)
-  Enfoque: Mobile-first, accesibilidad básica, transiciones suaves
-  CORREGIDO: Footer y tamaños optimizados
-*/
 
-/* --- BASE & LAYOUT --- */
+:root {
+    --fondo-principal: #0a0a0a;
+    --fondo-secundario: #111111;
+    --fondo-input: #050505;
+    --texto-principal: #ffffff;
+    --texto-secundario: #888888;
+    --acento: #a67c52;
+    --acento-hover: #c4956a;
+    --borde: #222222;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     background-color: #000;
     color: #fff;
@@ -14,21 +25,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px 15px 40px; /* Ajustado para móvil */
+    padding: 20px 15px 0;
     min-height: 100vh;
 }
 
 .booking-card {
-    max-width: 450px; /* Un poco más ancho para mejor visualización */
+    max-width: 450px;
     width: 100%;
-    background: #0a0a0a;
-    border-radius: 20px; /* Más redondeado pero no exagerado */
+    background: var(--fondo-principal);
+    border-radius: 20px;
     overflow: hidden;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
-/* --- HEADER VISUAL (ORIGINAL - SIN CAMBIOS) --- */
 .header-image-container {
     position: relative;
     width: 100%;
@@ -40,7 +50,6 @@ body {
     display: block; 
 }
 
-/* Overlay degradado: mejora legibilidad del texto sobre imagen */
 .fade-overlay {
     position: absolute;
     bottom: 0; 
@@ -50,10 +59,9 @@ body {
     background: linear-gradient(to bottom, rgba(10,10,10,0) 0%, #0a0a0a 100%);
 }
 
-/* Tipografía de marca */
 h1.logo-text {
     font-family: 'Playfair Display', serif;
-    color: #a67c52; 
+    color: var(--acento); 
     font-size: 1.8rem;
     letter-spacing: 2px;
     margin: 10px 0 5px;
@@ -62,44 +70,42 @@ h1.logo-text {
 }
 
 .subtitle {
-    color: #888;
+    color: var(--texto-secundario);
     letter-spacing: 2px;
     text-transform: uppercase;
-    font-size: 0.9rem; /* Ajustado para móvil */
+    font-size: 0.9rem;
     margin-bottom: 20px;
 }
 
-/* Info de contacto */
 .info-box {
     font-size: 0.85rem;
-    color: #ccc;
+    color: var(--texto-secundario);
     margin-bottom: 22px;
-    padding: 0 20px; /* Padding para que no toque los bordes */
+    padding: 0 20px;
 }
 
 .location-link {
-    color: #ccc;
+    color: var(--texto-principal);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .location-link:hover {
-    color: #a67c52;
+    color: var(--acento);
     text-decoration: underline;
 }
 
-/* --- FORMULARIO DE TURNOS --- */
 .booking-form {
-    padding: 25px 20px; /* Mejor padding para móvil */
-    background: #111;
-    margin: 15px;
-    border-radius: 15px; /* Un poco más redondeado */
+    padding: 35px 25px;
+    background: var(--fondo-secundario);
+    margin: 0 15px 30px;
+    border-radius: 15px;
 }
 
 .booking-form h3 {
     margin-top: 0;
-    color: #eee;
-    font-size: 1.3rem; /* Un poco más grande para mejor lectura */
+    color: var(--texto-principal);
+    font-size: 1.8rem;
     font-family: 'Playfair Display', serif;
     font-style: italic;
     margin-bottom: 20px;
@@ -112,36 +118,37 @@ h1.logo-text {
 
 .form-group label {
     display: block;
-    font-size: 0.75rem;
-    color: #a67c52;
-    margin-bottom: 5px;
+    font-size: 0.8rem;
+    color: var(--acento);
+    margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-weight: 600;
 }
 
 select {
     width: 100%;
-    padding: 14px; /* Un poco más grande para touch */
-    background: #050505;
-    border: 1px solid #222;
-    color: #fff;
-    border-radius: 8px; /* Más redondeado */
-    font-size: 1rem; /* Mejor tamaño para móvil */
+    padding: 15px;
+    background: var(--fondo-input);
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    color: var(--texto-principal);
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
     cursor: pointer;
 }
 
 select:focus {
     outline: none;
-    border-color: #a67c52;
+    border-color: var(--acento);
 }
 
-/* Botón WhatsApp: CTA principal */
 #btnWhatsapp {
-    background-color: #a67c52;
+    background-color: var(--acento);
     color: #000;
     border: none;
-    padding: 16px 20px; /* Más alto para mejor touch */
-    border-radius: 25px; /* Más redondeado (píldora) */
+    padding: 20px;
+    border-radius: 50px;
     width: 100%;
     font-weight: 700;
     cursor: pointer;
@@ -149,7 +156,7 @@ select:focus {
     align-items: center;
     justify-content: center;
     gap: 10px;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-top: 10px;
@@ -157,7 +164,7 @@ select:focus {
 }
 
 #btnWhatsapp:hover {
-    background-color: #c4956a;
+    background-color: var(--acento-hover);
     transform: translateY(-2px);
 }
 
@@ -167,24 +174,23 @@ select:focus {
     transform: none;
 }
 
-/* --- MÓDULO DE RESEÑAS --- */
 .reviews-section {
-    padding: 0 15px 20px; /* Ajustado */
-    border-top: 1px solid #222;
+    padding: 0 15px 20px;
+    border-top: 1px solid var(--borde);
     margin-top: 10px;
 }
 
 #toggle-review-form {
     background: none;
-    border: 1.5px solid #a67c52;
-    color: #a67c52;
+    border: 1.5px solid var(--acento);
+    color: var(--acento);
     padding: 12px 30px;
-    border-radius: 25px; /* Más redondeado */
+    border-radius: 25px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    margin: 20px auto 15px;
+    margin: 10px auto 25px;
     display: block;
     transition: all 0.3s ease;
 }
@@ -196,28 +202,28 @@ select:focus {
 
 .reviews-form {
     display: none;
-    background: #111;
-    padding: 25px 20px; /* Mejor padding */
+    background: var(--fondo-secundario);
+    padding: 35px 25px;
+    margin: 0 15px 30px;
     border-radius: 15px;
-    margin-top: 10px;
 }
 
 .reviews-form h3 {
     font-family: 'Playfair Display', serif;
-    color: #eee;
-    font-size: 1.2rem;
+    color: var(--texto-principal);
+    font-size: 1.4rem;
     margin-bottom: 15px;
 }
 
 .reviews-form input,
 .reviews-form textarea {
     width: 100%;
-    padding: 14px;
-    margin: 10px 0;
-    background: #050505;
-    border: 1px solid #222;
-    border-radius: 8px;
-    color: #fff;
+    padding: 15px;
+    margin: 12px 0;
+    background: var(--fondo-input);
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    color: var(--texto-principal);
     font-family: 'Roboto', sans-serif;
     font-size: 1rem;
 }
@@ -225,7 +231,7 @@ select:focus {
 .reviews-form input:focus,
 .reviews-form textarea:focus {
     outline: none;
-    border-color: #a67c52;
+    border-color: var(--acento);
 }
 
 .reviews-form textarea {
@@ -233,15 +239,14 @@ select:focus {
     resize: vertical;
 }
 
-/* Sistema de estrellas */
 .stars-rating {
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
-    font-size: 2rem; /* Un poco más grande */
+    font-size: 35px;
     cursor: pointer;
-    margin: 15px 0;
-    gap: 8px;
+    margin: 20px 0;
+    gap: 10px;
 }
 
 .star { 
@@ -258,78 +263,72 @@ select:focus {
     color: #f1c40f;
 }
 
-/* Tarjeta de reseña individual */
 .resena-card {
-    background: #111;
-    padding: 15px;
-    margin-bottom: 12px;
-    border-radius: 10px;
-    border-left: 4px solid #a67c52;
+    background: var(--fondo-secundario);
+    padding: 18px;
+    margin: 0 15px 15px;
+    border-radius: 12px;
+    border-left: 4px solid var(--acento);
     text-align: left;
 }
 
 .resena-card strong {
-    color: #fff;
+    color: var(--texto-principal);
     display: block;
     margin-bottom: 5px;
-    font-size: 0.95rem;
 }
 
 .resena-card p {
-    color: #ccc;
-    font-size: 0.9rem;
+    color: var(--texto-secundario);
+    font-size: 0.95rem;
     line-height: 1.5;
     margin: 0;
 }
 
-/* Mensaje sin reseñas */
 .sin-resenas {
     text-align: center;
-    color: #888;
-    font-size: 0.95rem;
-    margin: 20px 0;
+    color: var(--texto-secundario);
+    font-size: 1.1rem;
+    margin: 20px 15px;
     font-style: italic;
 }
-/* --- FOOTER ARREGLADO --- */
 
 .site-footer {
     width: 100%;
     max-width: 450px;
-    padding: 25px 20px 30px;
+    padding: 20px 20px 30px;
     margin: 20px auto 0;
-    text-align: center; /* Centra todo el contenido */
+    text-align: center;
     border-top: 1px solid #1a1a1a;
-    display: flex; /* Usamos flexbox */
-    flex-direction: column; /* Elementos en columna */
-    align-items: center; /* Centra horizontalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .history-text {
     font-family: 'Playfair Display', serif;
     font-style: italic;
-    color: #a67c52;
-    font-size: 1.05rem;
+    color: var(--acento);
+    font-size: 1.00rem;
     line-height: 1.5;
     margin-bottom: 12px;
-    text-align: center; /* Asegura centrado */
-    width: 100%;
+    text-align: center;
 }
 
 .footer-divider {
     width: 35px;
     height: 1px;
     background: #333;
-    margin: 12px auto; /* auto centra horizontalmente */
+    margin: 12px auto;
 }
 
-/* Link de Instagram centrado */
 .signature-link {
-    display: inline-flex; /* Flex pero centrado */
+    display: inline-flex;
     align-items: center;
-    justify-content: center; /* Centra el contenido */
+    justify-content: center;
     gap: 8px;
     text-decoration: none;
-    margin: 5px auto 0; /* auto centra */
+    margin: 5px auto 0;
 }
 
 .ig-icon {
@@ -342,13 +341,13 @@ select:focus {
     color: #888 !important;
     text-transform: uppercase;
     letter-spacing: 2.5px;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-family: 'Roboto', sans-serif;
     transition: 0.3s ease;
 }
 
 .signature-link:hover .nombre-firma {
-    color: #a67c52 !important;
+    color: var(--acento) !important;
     letter-spacing: 3px;
 }
 
@@ -356,10 +355,46 @@ select:focus {
     filter: brightness(1.1);
 }
 
-/* Responsive */
 @media (max-width: 480px) {
-    .site-footer {
-        padding: 20px 15px 25px;
+    body {
+        padding: 15px 10px 0;
+    }
+    
+    .booking-card {
+        border-radius: 20px;
+    }
+    
+    h1.logo-text {
+        font-size: 1.6rem;
+    }
+    
+    .subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+    }
+    
+    .info-box {
+        padding: 0 15px;
+        margin-bottom: 20px;
+    }
+    
+    .booking-form {
+        padding: 35px 25px;
+        margin: 0 15px 30px;
+    }
+    
+    .booking-form h3 {
+        font-size: 1.8rem;
+    }
+    
+    .reviews-form {
+        padding: 35px 25px;
+        margin: 0 15px 30px;
+    }
+    
+    .resena-card {
+        padding: 18px;
+        margin: 0 15px 15px;
     }
     
     .history-text {
@@ -374,5 +409,20 @@ select:focus {
     .nombre-firma {
         font-size: 0.75rem;
         letter-spacing: 2px;
+    }
+}
+
+@media (max-width: 360px) {
+    h1.logo-text {
+        font-size: 1.4rem;
+    }
+    
+    .booking-form h3 {
+        font-size: 1.5rem;
+    }
+    
+    select, .reviews-form input, .reviews-form textarea {
+        font-size: 0.95rem;
+        padding: 13px;
     }
 }
