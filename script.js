@@ -3,7 +3,7 @@ const urlAPI = 'https://script.google.com/macros/s/AKfycbyRz3tr30TemRgKoILNZWFRE
 
 const hC = [ "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
 
-// AGREGAMOS EL DÍA DE HOY DOMINGO 31 PARA EL TESTEO DIRECTO
+// Agregamos Domingo 31 para que el sistema tenga un día válido hoy
 const disp = {
     "Domingo 31": hC, 
     "Lunes 1": hC, "Martes 2": hC, "Jueves 4": hC, "Viernes 5": hC,
@@ -21,40 +21,21 @@ let estrellasSel = 0;
 const normalizar = (texto) => texto ? texto.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() : "";
 
 function init() {
-    console.log("=== INICIANDO DETECTIVE DE ERRORES ===");
-    const ahora = new Date();
-    const hoyNum = ahora.getDate();
-    console.log("Día numérico de hoy según el sistema:", hoyNum);
-
-    if (!sD) {
-        console.error("ERROR CRÍTICO: No se encontró el elemento select con id='dia' en el HTML.");
-        return;
-    }
-    
+    const hoy = new Date().getDate();
+    if (!sD) return;
     sD.innerHTML = '';
-    let diasAgregados = 0;
-
+    
     Object.keys(disp).forEach(d => {
         const numeroDia = parseInt(d.match(/\d+/));
-        let esMesSiguiente = (hoyNum > 25 && numeroDia < 10);
-
-        if (numeroDia >= hoyNum || esMesSiguiente) {
+        // Si el día evaluado es el 31 (hoy), o es mayor, lo dejamos pasar de una
+        if (numeroDia >= hoy || (hoy === 31 && numeroDia < 10)) {
             let o = document.createElement('option');
             o.value = d; o.text = d;
             sD.appendChild(o);
-            diasAgregados++;
         }
     });
-
-    console.log(`Cantidad de días cargados en el selector: ${diasAgregados}`);
-
-    if (sD.options.length > 0) {
-        console.log("Día inicialmente seleccionado en el combo:", sD.value);
-        upd(); 
-    } else {
-        console.warn("ADVERTENCIA: No se agregó ningún día al selector, quedó vacío.");
-    }
     
+    if (sD.options.length > 0) upd(); 
     cargarReseñas();
 
     const stars = document.querySelectorAll('.star');
@@ -70,80 +51,48 @@ function init() {
 } 
 
 async function upd() {
-    if (!sD || !sD.value) {
-        console.warn("upd() cancelado: sD no existe o no tiene un valor seleccionado.");
-        return;
-    }
-    if (!sH) {
-        console.error("ERROR CRÍTICO: No se encontró el elemento select con id='hora' en el HTML.");
-        return;
-    }
-
+    if (!sD || !sD.value || !sH) return;
     const dS = sD.value;
     const ahora = new Date();
     const hoyLabel = `${nombresDias[ahora.getDay()]} ${ahora.getDate()}`;
-    
-    console.log(`--- Ejecutando upd() para el día seleccionado: "${dS}" ---`);
-    console.log(`Hoy según sistema es: "${hoyLabel}" (Hora actual: ${ahora.getHours()}:${ahora.getMinutes()})`);
-    
     sH.innerHTML = '<option>Cargando...</option>';
 
     try {
-        const urlCompleta = `${urlAPI}?sheet=Agenda`;
-        console.log("Consultando a la API de Google Sheets en:", urlCompleta);
-        
-        const res = await fetch(urlCompleta);
+        const res = await fetch(`${urlAPI}?sheet=Agenda`);
         const data = await res.json();
-        
-        console.log("Datos crudos recibidos desde la API de Google:", data);
-        
-        const ocupados = Array.isArray(data) ? data : (data && data.data ? data.data : []);
-        console.log("Estructura de turnos ocupados procesada (Array):", ocupados);
+        const ocupados = Array.isArray(data) ? data : (data.data || []);
 
         sH.innerHTML = '';
-        let horasCargadas = 0;
-
         (disp[dS] || []).forEach(h => {
             const [hT, mT] = h.split(':').map(Number);
             let yaPaso = (normalizar(dS) === normalizar(hoyLabel)) && (hT < ahora.getHours() || (hT === ahora.getHours() && mT <= ahora.getMinutes() + 5));
 
             const ocupado = ocupados.some(t => {
-                if (!t) return false;
-                const fE = normalizar(t.fecha || t.Fecha || '');
+                const fE = normalizar(t.fecha || t.Fecha);
                 const fW = normalizar(dS);
                 const hE = t.hora ? t.hora.toString().match(/(\d{1,2}):(\d{2})/)?.[0].padStart(5, '0') : "";
-                
-                let coincide = (fE === fW && hE === h.padStart(5, '0'));
-                if (coincide) {
-                    console.log(`-> Turno ocupado detectado: Fecha "${t.fecha || t.Fecha}", Hora "${t.hora}"`);
-                }
-                return coincide;
+                return fE === fW && hE === h.padStart(5, '0');
             });
 
             if (!yaPaso && !ocupado) {
                 let o = document.createElement('option');
                 o.value = h; o.text = h + " hs";
                 sH.appendChild(o);
-                horasCargadas++;
             }
         });
         
-        console.log(`Cantidad de horarios libres agregados para "${dS}": ${horasCargadas}`);
         sH.disabled = false;
-        
         const btnWa = document.getElementById('btnWhatsapp');
         if (btnWa) {
             btnWa.disabled = sH.options.length === 0;
         }
         
     } catch (e) { 
-        console.error("¡ERROR EN LA FUNCIÓN UPD()!: ", e);
         sH.innerHTML = '<option>Error al cargar</option>'; 
     }
 }
 
 function enviarTurno() {
-    if(!sD || !sH) return;
     const msg = `Hola Elvio! Quiero reservar un turno para el ${sD.value} a las ${sH.value} hs.`;
     window.open(`https://wa.me/543436434685?text=${encodeURIComponent(msg)}`, '_blank');
 }
@@ -169,7 +118,6 @@ async function cargarReseñas() {
     try {
         const res = await fetch(`${urlAPI}?sheet=Reseñas`);
         const datos = await res.json();
-        console.log("Datos de Reseñas recibidos:", datos);
         const lista = Array.isArray(datos) ? datos : (datos.data || []);
         cont.innerHTML = ''; 
 
@@ -185,16 +133,16 @@ async function cargarReseñas() {
             div.innerHTML = `<strong>${r.nombre || r.Nombre || 'Anónimo'}</strong><div style="color:#C5A059">${'★'.repeat(e)}${'☆'.repeat(5-e)}</div><p>${r.comentario || r.Comentario || ''}</p>`;
             cont.appendChild(div);
         });
-    } catch (e) { 
-        console.error("Error cargando reseñas:", e);
-        cont.innerHTML = "No hay reseñas aún."; 
-    }
+    } catch (e) { cont.innerHTML = "No hay reseñas aún."; }
 }
 
 function toggleReviewForm() {
     const f = document.getElementById('form-opinion');
-    if (f) f.style.display = (f.style.display === 'none') ? 'block' : 'none';
+    f.style.display = (f.style.display === 'none') ? 'block' : 'none';
 }
 
-if (sD) sD.onchange = upd;
-window.onload = init;
+// Vinculación segura de eventos al cargar la ventana completa para evitar el error de null
+window.addEventListener('load', () => {
+    if (sD) sD.onchange = upd;
+    init();
+});
