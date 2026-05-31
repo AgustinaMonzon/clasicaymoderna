@@ -3,7 +3,9 @@ const urlAPI = 'https://script.google.com/macros/s/AKfycbyRz3tr30TemRgKoILNZWFRE
 
 const hC = [ "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
 
+// AGREGAMOS EL DÍA DE HOY DOMINGO 31 PARA EL TESTEO DIRECTO
 const disp = {
+    "Domingo 31": hC, 
     "Lunes 1": hC, "Martes 2": hC, "Jueves 4": hC, "Viernes 5": hC,
     "Lunes 8": hC, "Miércoles 10": hC, "Jueves 11": hC, "Sábado 13": hC,
     "Martes 16": hC, "Miércoles 17": hC, "Viernes 19": hC, "Sábado 20": hC,
@@ -19,26 +21,40 @@ let estrellasSel = 0;
 const normalizar = (texto) => texto ? texto.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() : "";
 
 function init() {
+    console.log("=== INICIANDO DETECTIVE DE ERRORES ===");
     const ahora = new Date();
     const hoyNum = ahora.getDate();
+    console.log("Día numérico de hoy según el sistema:", hoyNum);
 
-    if (!sD) return;
+    if (!sD) {
+        console.error("ERROR CRÍTICO: No se encontró el elemento select con id='dia' en el HTML.");
+        return;
+    }
+    
     sD.innerHTML = '';
+    let diasAgregados = 0;
 
     Object.keys(disp).forEach(d => {
         const numeroDia = parseInt(d.match(/\d+/));
-        
-        // Parche de fin de mes: permite que convivan los días de junio estando a 31 de mayo
         let esMesSiguiente = (hoyNum > 25 && numeroDia < 10);
 
         if (numeroDia >= hoyNum || esMesSiguiente) {
             let o = document.createElement('option');
             o.value = d; o.text = d;
             sD.appendChild(o);
+            diasAgregados++;
         }
     });
 
-    if (sD.options.length > 0) upd(); 
+    console.log(`Cantidad de días cargados en el selector: ${diasAgregados}`);
+
+    if (sD.options.length > 0) {
+        console.log("Día inicialmente seleccionado en el combo:", sD.value);
+        upd(); 
+    } else {
+        console.warn("ADVERTENCIA: No se agregó ningún día al selector, quedó vacío.");
+    }
+    
     cargarReseñas();
 
     const stars = document.querySelectorAll('.star');
@@ -54,20 +70,39 @@ function init() {
 } 
 
 async function upd() {
-    if (!sD || !sD.value || !sH) return;
+    if (!sD || !sD.value) {
+        console.warn("upd() cancelado: sD no existe o no tiene un valor seleccionado.");
+        return;
+    }
+    if (!sH) {
+        console.error("ERROR CRÍTICO: No se encontró el elemento select con id='hora' en el HTML.");
+        return;
+    }
+
     const dS = sD.value;
     const ahora = new Date();
     const hoyLabel = `${nombresDias[ahora.getDay()]} ${ahora.getDate()}`;
+    
+    console.log(`--- Ejecutando upd() para el día seleccionado: "${dS}" ---`);
+    console.log(`Hoy según sistema es: "${hoyLabel}" (Hora actual: ${ahora.getHours()}:${ahora.getMinutes()})`);
+    
     sH.innerHTML = '<option>Cargando...</option>';
 
     try {
-        const res = await fetch(`${urlAPI}?sheet=Agenda`);
+        const urlCompleta = `${urlAPI}?sheet=Agenda`;
+        console.log("Consultando a la API de Google Sheets en:", urlCompleta);
+        
+        const res = await fetch(urlCompleta);
         const data = await res.json();
         
-        // Verificación ultra segura: si no viene un array válido, lo creamos vacío para que no rompa el bucle
+        console.log("Datos crudos recibidos desde la API de Google:", data);
+        
         const ocupados = Array.isArray(data) ? data : (data && data.data ? data.data : []);
+        console.log("Estructura de turnos ocupados procesada (Array):", ocupados);
 
         sH.innerHTML = '';
+        let horasCargadas = 0;
+
         (disp[dS] || []).forEach(h => {
             const [hT, mT] = h.split(':').map(Number);
             let yaPaso = (normalizar(dS) === normalizar(hoyLabel)) && (hT < ahora.getHours() || (hT === ahora.getHours() && mT <= ahora.getMinutes() + 5));
@@ -77,31 +112,33 @@ async function upd() {
                 const fE = normalizar(t.fecha || t.Fecha || '');
                 const fW = normalizar(dS);
                 const hE = t.hora ? t.hora.toString().match(/(\d{1,2}):(\d{2})/)?.[0].padStart(5, '0') : "";
-                return fE === fW && hE === h.padStart(5, '0');
+                
+                let coincide = (fE === fW && hE === h.padStart(5, '0'));
+                if (coincide) {
+                    console.log(`-> Turno ocupado detectado: Fecha "${t.fecha || t.Fecha}", Hora "${t.hora}"`);
+                }
+                return coincide;
             });
 
             if (!yaPaso && !ocupado) {
                 let o = document.createElement('option');
                 o.value = h; o.text = h + " hs";
                 sH.appendChild(o);
+                horasCargadas++;
             }
         });
         
+        console.log(`Cantidad de horarios libres agregados para "${dS}": ${horasCargadas}`);
         sH.disabled = false;
-        const btnWa = document.getElementById('btnWhatsapp') || document.querySelector('button[onclick*="enviarTurno"]');
+        
+        const btnWa = document.getElementById('btnWhatsapp');
         if (btnWa) {
             btnWa.disabled = sH.options.length === 0;
         }
         
     } catch (e) { 
-        // Si la API falla temporalmente, igual mostramos las horas base para no dejar al cliente sin servicio
-        sH.innerHTML = '';
-        (disp[dS] || []).forEach(h => {
-            let o = document.createElement('option');
-            o.value = h; o.text = h + " hs";
-            sH.appendChild(o);
-        });
-        sH.disabled = false;
+        console.error("¡ERROR EN LA FUNCIÓN UPD()!: ", e);
+        sH.innerHTML = '<option>Error al cargar</option>'; 
     }
 }
 
@@ -132,6 +169,7 @@ async function cargarReseñas() {
     try {
         const res = await fetch(`${urlAPI}?sheet=Reseñas`);
         const datos = await res.json();
+        console.log("Datos de Reseñas recibidos:", datos);
         const lista = Array.isArray(datos) ? datos : (datos.data || []);
         cont.innerHTML = ''; 
 
@@ -147,7 +185,10 @@ async function cargarReseñas() {
             div.innerHTML = `<strong>${r.nombre || r.Nombre || 'Anónimo'}</strong><div style="color:#C5A059">${'★'.repeat(e)}${'☆'.repeat(5-e)}</div><p>${r.comentario || r.Comentario || ''}</p>`;
             cont.appendChild(div);
         });
-    } catch (e) { cont.innerHTML = "No hay reseñas aún."; }
+    } catch (e) { 
+        console.error("Error cargando reseñas:", e);
+        cont.innerHTML = "No hay reseñas aún."; 
+    }
 }
 
 function toggleReviewForm() {
