@@ -21,26 +21,25 @@ const normalizar = (texto) => texto ? texto.toString().toLowerCase().normalize("
 function init() {
     const ahora = new Date();
     const hoyNum = ahora.getDate();
-    const mesActual = ahora.getMonth(); // Mayo es 4, Junio es 5
 
-    if (!sD) return;
-    sD.innerHTML = '';
+    // Verificación de seguridad por si el HTML no cargó todavía
+    const selectDia = document.getElementById('dia');
+    if (!selectDia) return;
+    
+    selectDia.innerHTML = '';
 
     Object.keys(disp).forEach(d => {
         const numeroDia = parseInt(d.match(/\d+/));
-        
-        // LÓGICA INTELIGENTE: Si estamos a fin de mes (ej: 31) y el turno es de los primeros días (1, 2, 3), 
-        // asumimos que pertenece al mes siguiente y lo mostramos igual.
         let esMesSiguiente = (hoyNum > 25 && numeroDia < 10);
 
         if (numeroDia >= hoyNum || esMesSiguiente) {
             let o = document.createElement('option');
             o.value = d; o.text = d;
-            sD.appendChild(o);
+            selectDia.appendChild(o);
         }
     });
 
-    if (sD.options.length > 0) upd(); 
+    if (selectDia.options.length > 0) upd(); 
     cargarReseñas();
 
     const stars = document.querySelectorAll('.star');
@@ -56,18 +55,22 @@ function init() {
 } 
 
 async function upd() {
-    if (!sD || !sD.value) return;
-    const dS = sD.value;
+    const selectDia = document.getElementById('dia');
+    const selectHora = document.getElementById('hora');
+    
+    if (!selectDia || !selectDia.value || !selectHora) return;
+    
+    const dS = selectDia.value;
     const ahora = new Date();
     const hoyLabel = `${nombresDias[ahora.getDay()]} ${ahora.getDate()}`;
-    sH.innerHTML = '<option>Cargando...</option>';
+    selectHora.innerHTML = '<option>Cargando...</option>';
 
     try {
         const res = await fetch(`${urlAPI}?sheet=Agenda`);
         const data = await res.json();
         const ocupados = Array.isArray(data) ? data : (data.data || []);
 
-        sH.innerHTML = '';
+        selectHora.innerHTML = '';
         (disp[dS] || []).forEach(h => {
             const [hT, mT] = h.split(':').map(Number);
             let yaPaso = (normalizar(dS) === normalizar(hoyLabel)) && (hT < ahora.getHours() || (hT === ahora.getHours() && mT <= ahora.getMinutes() + 5));
@@ -82,22 +85,28 @@ async function upd() {
             if (!yaPaso && !ocupado) {
                 let o = document.createElement('option');
                 o.value = h; o.text = h + " hs";
-                sH.appendChild(o);
+                selectHora.appendChild(o);
             }
         });
         
-        sH.disabled = false;
-        if(document.getElementById('btnWhatsapp')) {
-            document.getElementById('btnWhatsapp').disabled = sH.options.length === 0;
+        selectHora.disabled = false;
+        
+        // Control de seguridad para el botón (busca cualquier id posible de botón de WhatsApp)
+        const btn = document.getElementById('btnWhatsapp') || document.getElementById('btnEnviar') || document.querySelector('button[onclick*="enviarTurno"]');
+        if (btn) {
+            btn.disabled = selectHora.options.length === 0;
         }
         
     } catch (e) { 
-        sH.innerHTML = '<option>Error al cargar</option>'; 
+        selectHora.innerHTML = '<option>Error al cargar</option>'; 
     }
 }
 
 function enviarTurno() {
-    const msg = `Hola Elvio! Quiero reservar un turno para el ${sD.value} a las ${sH.value} hs.`;
+    const selectDia = document.getElementById('dia');
+    const selectHora = document.getElementById('hora');
+    if(!selectDia || !selectHora) return;
+    const msg = `Hola Elvio! Quiero reservar un turno para el ${selectDia.value} a las ${selectHora.value} hs.`;
     window.open(`https://wa.me/543436434685?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -142,8 +151,12 @@ async function cargarReseñas() {
 
 function toggleReviewForm() {
     const f = document.getElementById('form-opinion');
-    f.style.display = (f.style.display === 'none') ? 'block' : 'none';
+    if(f) f.style.display = (f.style.display === 'none') ? 'block' : 'none';
 }
 
-sD.onchange = upd;
-window.onload = init;
+// Vinculamos los eventos de manera segura al cargar la ventana
+window.addEventListener('load', () => {
+    const selectDia = document.getElementById('dia');
+    if(selectDia) selectDia.onchange = upd;
+    init();
+});
