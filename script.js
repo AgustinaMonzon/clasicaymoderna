@@ -22,24 +22,23 @@ function init() {
     const ahora = new Date();
     const hoyNum = ahora.getDate();
 
-    // Verificación de seguridad por si el HTML no cargó todavía
-    const selectDia = document.getElementById('dia');
-    if (!selectDia) return;
-    
-    selectDia.innerHTML = '';
+    if (!sD) return;
+    sD.innerHTML = '';
 
     Object.keys(disp).forEach(d => {
         const numeroDia = parseInt(d.match(/\d+/));
+        
+        // Parche de fin de mes: permite que convivan los días de junio estando a 31 de mayo
         let esMesSiguiente = (hoyNum > 25 && numeroDia < 10);
 
         if (numeroDia >= hoyNum || esMesSiguiente) {
             let o = document.createElement('option');
             o.value = d; o.text = d;
-            selectDia.appendChild(o);
+            sD.appendChild(o);
         }
     });
 
-    if (selectDia.options.length > 0) upd(); 
+    if (sD.options.length > 0) upd(); 
     cargarReseñas();
 
     const stars = document.querySelectorAll('.star');
@@ -55,28 +54,27 @@ function init() {
 } 
 
 async function upd() {
-    const selectDia = document.getElementById('dia');
-    const selectHora = document.getElementById('hora');
-    
-    if (!selectDia || !selectDia.value || !selectHora) return;
-    
-    const dS = selectDia.value;
+    if (!sD || !sD.value || !sH) return;
+    const dS = sD.value;
     const ahora = new Date();
     const hoyLabel = `${nombresDias[ahora.getDay()]} ${ahora.getDate()}`;
-    selectHora.innerHTML = '<option>Cargando...</option>';
+    sH.innerHTML = '<option>Cargando...</option>';
 
     try {
         const res = await fetch(`${urlAPI}?sheet=Agenda`);
         const data = await res.json();
-        const ocupados = Array.isArray(data) ? data : (data.data || []);
+        
+        // Verificación ultra segura: si no viene un array válido, lo creamos vacío para que no rompa el bucle
+        const ocupados = Array.isArray(data) ? data : (data && data.data ? data.data : []);
 
-        selectHora.innerHTML = '';
+        sH.innerHTML = '';
         (disp[dS] || []).forEach(h => {
             const [hT, mT] = h.split(':').map(Number);
             let yaPaso = (normalizar(dS) === normalizar(hoyLabel)) && (hT < ahora.getHours() || (hT === ahora.getHours() && mT <= ahora.getMinutes() + 5));
 
             const ocupado = ocupados.some(t => {
-                const fE = normalizar(t.fecha || t.Fecha);
+                if (!t) return false;
+                const fE = normalizar(t.fecha || t.Fecha || '');
                 const fW = normalizar(dS);
                 const hE = t.hora ? t.hora.toString().match(/(\d{1,2}):(\d{2})/)?.[0].padStart(5, '0') : "";
                 return fE === fW && hE === h.padStart(5, '0');
@@ -85,28 +83,31 @@ async function upd() {
             if (!yaPaso && !ocupado) {
                 let o = document.createElement('option');
                 o.value = h; o.text = h + " hs";
-                selectHora.appendChild(o);
+                sH.appendChild(o);
             }
         });
         
-        selectHora.disabled = false;
-        
-        // Control de seguridad para el botón (busca cualquier id posible de botón de WhatsApp)
-        const btn = document.getElementById('btnWhatsapp') || document.getElementById('btnEnviar') || document.querySelector('button[onclick*="enviarTurno"]');
-        if (btn) {
-            btn.disabled = selectHora.options.length === 0;
+        sH.disabled = false;
+        const btnWa = document.getElementById('btnWhatsapp') || document.querySelector('button[onclick*="enviarTurno"]');
+        if (btnWa) {
+            btnWa.disabled = sH.options.length === 0;
         }
         
     } catch (e) { 
-        selectHora.innerHTML = '<option>Error al cargar</option>'; 
+        // Si la API falla temporalmente, igual mostramos las horas base para no dejar al cliente sin servicio
+        sH.innerHTML = '';
+        (disp[dS] || []).forEach(h => {
+            let o = document.createElement('option');
+            o.value = h; o.text = h + " hs";
+            sH.appendChild(o);
+        });
+        sH.disabled = false;
     }
 }
 
 function enviarTurno() {
-    const selectDia = document.getElementById('dia');
-    const selectHora = document.getElementById('hora');
-    if(!selectDia || !selectHora) return;
-    const msg = `Hola Elvio! Quiero reservar un turno para el ${selectDia.value} a las ${selectHora.value} hs.`;
+    if(!sD || !sH) return;
+    const msg = `Hola Elvio! Quiero reservar un turno para el ${sD.value} a las ${sH.value} hs.`;
     window.open(`https://wa.me/543436434685?text=${encodeURIComponent(msg)}`, '_blank');
 }
 
@@ -151,12 +152,8 @@ async function cargarReseñas() {
 
 function toggleReviewForm() {
     const f = document.getElementById('form-opinion');
-    if(f) f.style.display = (f.style.display === 'none') ? 'block' : 'none';
+    if (f) f.style.display = (f.style.display === 'none') ? 'block' : 'none';
 }
 
-// Vinculamos los eventos de manera segura al cargar la ventana
-window.addEventListener('load', () => {
-    const selectDia = document.getElementById('dia');
-    if(selectDia) selectDia.onchange = upd;
-    init();
-});
+if (sD) sD.onchange = upd;
+window.onload = init;
