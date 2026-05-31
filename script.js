@@ -28,7 +28,7 @@ function init() {
     Object.keys(disp).forEach(d => {
         const numeroDia = parseInt(d.match(/\d+/));
         // Si el día evaluado es el 31 (hoy), o es mayor, lo dejamos pasar de una
-        if (numeroDia >= hoy || (hoy === 31 && numeroDia < 10)) {
+        if (numeroDia >= hoy || (hoy === 31 && numeroDia < 32)) {
             let o = document.createElement('option');
             o.value = d; o.text = d;
             sD.appendChild(o);
