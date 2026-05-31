@@ -19,17 +19,27 @@ let estrellasSel = 0;
 const normalizar = (texto) => texto ? texto.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() : "";
 
 function init() {
-    const hoy = new Date().getDate();
+    const ahora = new Date();
+    const hoyNum = ahora.getDate();
+    const mesActual = ahora.getMonth(); // Mayo es 4, Junio es 5
+
     if (!sD) return;
     sD.innerHTML = '';
+
     Object.keys(disp).forEach(d => {
         const numeroDia = parseInt(d.match(/\d+/));
-        if (numeroDia >= hoy) {
+        
+        // LÓGICA INTELIGENTE: Si estamos a fin de mes (ej: 31) y el turno es de los primeros días (1, 2, 3), 
+        // asumimos que pertenece al mes siguiente y lo mostramos igual.
+        let esMesSiguiente = (hoyNum > 25 && numeroDia < 10);
+
+        if (numeroDia >= hoyNum || esMesSiguiente) {
             let o = document.createElement('option');
             o.value = d; o.text = d;
             sD.appendChild(o);
         }
     });
+
     if (sD.options.length > 0) upd(); 
     cargarReseñas();
 
@@ -46,7 +56,7 @@ function init() {
 } 
 
 async function upd() {
-    if (!sD.value) return;
+    if (!sD || !sD.value) return;
     const dS = sD.value;
     const ahora = new Date();
     const hoyLabel = `${nombresDias[ahora.getDay()]} ${ahora.getDate()}`;
@@ -76,8 +86,10 @@ async function upd() {
             }
         });
         
-        sH.disabled = false; // HABILITA EL MENÚ QUE ESTABA BLOQUEADO EN EL HTML
-        document.getElementById('btnWhatsapp').disabled = sH.options.length === 0;
+        sH.disabled = false;
+        if(document.getElementById('btnWhatsapp')) {
+            document.getElementById('btnWhatsapp').disabled = sH.options.length === 0;
+        }
         
     } catch (e) { 
         sH.innerHTML = '<option>Error al cargar</option>'; 
