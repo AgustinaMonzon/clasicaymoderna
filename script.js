@@ -3,16 +3,26 @@ const urlAPI = 'https://script.google.com/macros/s/AKfycbyRz3tr30TemRgKoILNZWFRE
 
 const hC = [ "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
 
-// Agregamos Domingo 31 para que el sistema tenga un día válido hoy
 const disp = {
-    "Domingo 31": hC, 
-    "Lunes 1": hC, "Martes 2": hC, "Jueves 4": hC, "Viernes 5": hC,
-    "Lunes 8": hC, "Miércoles 10": hC, "Jueves 11": hC, "Sábado 13": hC,
-    "Martes 16": hC, "Miércoles 17": hC, "Viernes 19": hC, "Sábado 20": hC,
-    "Lunes 22": hC, "Martes 23": hC, "Jueves 25": hC, "Viernes 26": hC,
-    "Lunes 29": hC
+    "Miércoles 1": hC,
+    "Jueves 2": hC,
+    "Sábado 4": hC,
+    "Martes 7": hC,
+    "Miércoles 8": hC,
+    "Viernes 10": hC,
+    "Sábado 11": hC,
+    "Lunes 13": hC,
+    "Martes 14": hC,
+    "Jueves 16": hC,
+    "Viernes 17": hC,
+    "Lunes 20": hC,
+    "Miércoles 22": hC,
+    "Jueves 23": hC,
+    "Sábado 25": hC,
+    "Martes 28": hC,
+    "Miércoles 29": hC,
+    "Viernes 31": hC
 };
-
 const nombresDias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 const sD = document.getElementById('dia');
 const sH = document.getElementById('hora');
