@@ -4,24 +4,11 @@ const urlAPI = 'https://script.google.com/macros/s/AKfycbyRz3tr30TemRgKoILNZWFRE
 const hC = [ "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00"];
 
 const disp = {
-    "Miércoles 1": hC,
-    "Jueves 2": hC,
-    "Sábado 4": hC,
-    "Martes 7": hC,
-    "Miércoles 8": hC,
-    "Viernes 10": hC,
-    "Sábado 11": hC,
-    "Lunes 13": hC,
-    "Martes 14": hC,
-    "Jueves 16": hC,
-    "Viernes 17": hC,
-    "Lunes 20": hC,
-    "Miércoles 22": hC,
-    "Jueves 23": hC,
-    "Sábado 25": hC,
-    "Martes 28": hC,
-    "Miércoles 29": hC,
-    "Viernes 31": hC
+  "Lunes 3": hC, "Martes 4": hC, "Jueves 6": hC, "Viernes 7": hC,
+    "Lunes 10": hC, "Miércoles 12": hC, "Jueves 13": hC, "Sábado 15": hC,
+    "Martes 18": hC, "Miércoles 19": hC, "Viernes 21": hC, "Sábado 22": hC,
+    "Lunes 24": hC, "Martes 25": hC, "Jueves 27": hC, "Viernes 28": hC,
+    "Lunes 31": hC
 };
 const nombresDias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 const sD = document.getElementById('dia');
